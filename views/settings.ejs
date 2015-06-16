@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<% include ./partials/static-css-js %>
+<title>Mapito.org - Map settings</title>
+
+<style>
+html { height: 100% }
+body { 
+	margin: 0;
+	padding: 50px 0 50px 0; 
+	height: 100%;
+	overflow:hidden;
+}
+
+#map-canvas {
+	width: 100%;
+	height: 500px;
+}
+.btn.active, .btn:active {
+    background-color: #3498db;
+    color: #FFFFFF;
+}
+</style>
+<script>
+$(document).ready(function() {
+	$("#navbar-settings").addClass("active");
+	
+	$('input:radio[name="map_service"]').filter('[value="<%=map.service%>"]').attr('checked', true);
+	$('input:radio[name="map_use"]').filter('[value="<%=map.use%>"]').attr('checked', true);
+	
+	$("#update-map-settings").submit(function( event ) {
+		event.preventDefault();
+		
+		if($("#map-name").val() != "") {
+			$.post( "/update_map_settings", $(this).serialize(), function( data ) {
+				if (data.msg == "ok") { 
+					$("#savedMsg").show();
+					
+					setTimeout(function() {
+						$("#savedMsg").hide('slow');
+					}, 3000);
+				} else { 
+					$("#errorMsg").show();
+				}
+
+			}, "json");
+		}
+		else {
+			$("#map-name").parent().addClass("has-warning");
+			$("#map-name").parent().find("p").text("Please give a name.")
+		}
+	});
+	
+});
+</script>
+</head>
+
+<body>
+
+	<div class="container">
+		<% include ./partials/header %>
+	
+		
+			<div class="page-header">
+				<h2 id="dashboard-title">Settings</h2>
+			</div>
+			
+			<div id="savedMsg" aria-label="Close">
+			Changes has been saved!
+			</div>
+			
+			<div class="alert alert-danger" id="errorMsg" role="alert" aria-label="Close">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4>You got an error!</h4>
+				<p>An unexpected error has occurred. Please try again later. </p>
+				<p>If this problem continues, please contact with system administrator.</p>
+				<br>
+				<button type="button" class="btn btn-default btn-sm" onclick="$(this).alert('close')">Ok</button>
+			</div>
+		
+			<div style="max-width: 500px;">
+				<form method="post" id="update-map-settings">
+					<input type="hidden" class="form-control" name="mapid" value="<%= map._id %>">
+					<div class="form-group">
+						<label for="map-name">Map name:</label>
+						<input type="text" class="form-control" id="map-name" name="name" value="<%= map.name %>">
+						<p class="text-warning"></p>
+					</div>
+					<div class="form-group">
+						<label for="map-google">Map service:</label>
+						<div class="radio">
+							<label>
+								<input type="radio" name="map_service" id="map-google" value="google">
+								Google
+							</label>
+						</div>
+						
+						<div class="radio">
+							<label>
+								<input type="radio" name="map_service" id="map-bing" value="bing">
+								Bing
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<input type="submit" class="btn btn-primary" value="Save">
+					</div>
+			     </form>
+			     <br>
+			</div>
+
+		<% include ./partials/footer %>
+	</div>
+	<% include ./partials/googleanalytics %>
+</body>
+</html>

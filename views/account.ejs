@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Mapito.org - Account settings</title>
+<% include ./partials/static-css-js %>
+<script src="../javascript/user-account.js"></script>
+<style>
+.modal-dialog-center {
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="container">
+		<% include ./partials/header %>
+	</div>	
+	<br><br>
+	<div class="container">	
+			<div class="page-header">
+				<h2 id="dashboard-title">Account settings</h2>
+			</div>
+			<div class="row">
+				<div class="col-sm-3 col-md-3 col-lg-2">
+					<ul class="list-group">
+						<li class="list-group-item"><a href="/user/account">Account</a></li>
+						<% if (typeof user.local.email !== "undefined") { %>
+						<li class="list-group-item"><a href="/user/password">Change password</a></li>
+						<% } %>
+						<li class="list-group-item"><a href="/user/delete">Delete account</a></li>
+						<li class="list-group-item"><a href="/user/access_tokens">Access Tokens</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-5 col-md-5 col-lg-4">
+				
+						<div class="alert alert-danger" id="errorMsg" role="alert" style="display: none;">
+							An unexpected error has occurred. Please try again later. <br>
+							If this problem continues, please contact with system
+							administrator.
+						</div>		
+					<% if (action == "account") { %>
+						<form method="post" id="update-account-form" action="/updateAccount">
+							
+							<div class="form-group">
+								<label for="name">Name:</label>
+								<input type="text" class="form-control" id="name" name="name" value="<%= user.local.name || user.facebook.name || user.google.name %>">
+								<p class="text-warning"></p>
+							</div>
+							
+							<div class="form-group">
+								<label for="mail">E-mail:</label>
+								<input type="text" class="form-control" id="mail" name="mail" value="<%= user.local.email || user.facebook.email || user.google.email %>">
+								<p class="text-warning"></p>
+							</div>
+					<% } else if (action=="password" && typeof user.local.email !== "undefined") { %>		
+						<form method="post" id="change-password-form" action="/changePassword">
+									
+							<div class="alert alert-warning" id="warnPasswordMsg" role="alert" style="display: none;">
+								Incorrect password.
+							</div>
+		
+							<div class="form-group">
+								<label>Current password:</label>
+								<input type="password" class="form-control" name="password" id="current-password">
+							</div>
+							
+							<div class="form-group">
+								<label>New password:</label>
+								<input type="password" class="form-control" name="newpassword" id="new-password">
+
+								<label>Confirm new password:</label>
+								<input type="password" class="form-control" name="confirmpassword" id="confirm-password">
+								
+								<p class="text-warning"></p>
+							</div>
+					<% } else if (action=="delete") { %>		
+						<form method="post" id="delete-account-form">
+							
+							<% if (typeof user.local.email !== "undefined") { %>
+							<div class="form-group">
+								<h5>You must type your password to delete your account.</h5>
+							</div>
+		
+							<div class="form-group">
+								<label>Password:</label>
+								<input type="password" class="form-control" name="password" id="password">
+								<p class="text-warning"></p>
+							</div>
+							<% } %>
+							
+					<% } %>
+							<div class="form-group">
+								<% if (action=="delete") { %>
+									<input type="submit" class="btn btn-danger" value="Delete account">
+								<% } else { %>
+									<input type="submit" class="btn btn-primary" value="Save">
+								<% } %>
+							</div>
+						</form>
+				</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="modal-delete-account" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-center">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title text-danger" id="myModalLabel">Are you sure to delete your account?</h4>
+						</div>
+						<div class="modal-body">
+							<p class="text-danger"><b>Please note:</b> Account deletion is permanent and can not be undone.</p>
+						     
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-danger" id="confirm-delete-account">Delete account</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+	</div>
+	
+	<% include ./partials/footer %>
+	
+	<% include ./partials/googleanalytics %>
+</body>
+</html>

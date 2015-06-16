@@ -1,0 +1,68 @@
+html { height: 100%; ,min-height: 100%;}
+body {
+	margin: 0;
+	padding-top: 50px;
+	height: 100%;
+	background-color: #f8f8f8;
+	color:#777777;
+}
+
+#savedMsg {
+	background-color:#5CB85C;
+	color: #F0F0F0;
+	border: 1px solid #53A653;
+	display:none;
+	padding: 7px 20px;
+	margin:0px;
+	position: fixed;
+	top:0px;
+	left:50%;
+	z-index: 10000;
+	border-radius:3px;
+	box-shadow: 0px 0px 7px #A0A0A0;
+	transform: translateX(-50%);
+	-moz-transform:translateX(-50%);
+	-webkit-transform:translateX(-50%);
+	-o-transform:translateX(-50%);
+	-ms-transform:translateX(-50%);
+}
+#errorMsg {
+	display:none;
+	position: fixed;
+	top:0px;
+	z-index: 10000;
+	left:50%;
+	box-shadow: 0px 0px 7px #A0A0A0;
+	transform: translateX(-50%);
+	-moz-transform:translateX(-50%);
+	-webkit-transform:translateX(-50%);
+	-o-transform:translateX(-50%);
+	-ms-transform:translateX(-50%);
+}
+
+
+
+#options {
+	padding: 50px 0;
+}
+
+footer {
+	padding-top: 50px;
+	padding-bottom: 10px;
+	background-color: #253237;
+	text-align: center;
+}
+
+.navbar-brand {
+	padding: 8px;
+}
+
+.pull-center {
+	float: none;
+	margin: auto;
+	diplay: inline-block;
+}
+
+.map-options-table  td {
+	padding-bottom: 5px;
+}

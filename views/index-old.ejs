@@ -1,0 +1,269 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+
+<head>
+<title>Mapito.org</title>
+<% include ./partials/static-css-js %>
+<link href="/stylesheets/index.css" rel="stylesheet">
+<script src="/javascript/index.js"></script>
+
+</head>
+
+<body>
+<% include ./partials/googleanalytics %>
+
+<% include ./partials/header %>
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="8000" style="display:none;height:400px;background-color:#357AE8;">
+ 
+	<ol class="carousel-indicators">
+		<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		<li data-target="#carousel-example-generic" data-slide-to="1"></li>
+	</ol>
+	
+	<div class="carousel-inner" role="listbox" style="height:100%;">
+		<div class="item active" style="padding-top:80px;height:100%;color:#FFFFFF;">
+			<div class="container">
+				<div class="row">
+					<div class="hidden-xs col-sm-3 col-md-2">
+						<img src="/images/mapito-home.png" alt="mapito.org" >
+					</div>
+					<div class="col-xs-12 col-sm-9 col-md-9">
+						<br>
+						<h1>Mapito.org</h1>
+						<p style="font-size:20px;text-align:left;">Mapito is a web application that facilitates the creation of a map with custom controls and embedding it in a website.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="item" style="padding-top:80px;height:100%;color:#FFFFFF;">
+			<div class="container">
+				<div class="row">
+					<div class="hidden-xs col-sm-3 col-md-2">
+						<img src="/images/rt-home.png" alt="mapito.org" >
+					</div>
+					<div class="col-xs-12 col-sm-9 col-md-9">
+						<br>
+						<h1>Route tracking</h1>
+						<p style="font-size:20px;text-align:left;">Mapito allows to track routes through a web browser of a smartphone or tablet with GPS and HTML5 Geolocation support.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+	<br><br>
+	<div class="container">
+		<!-- Example row of columns -->
+		<div class="row text-center">
+			<div class="col-sm-4 col-md-4">
+				<h2>Maps</h2>
+				<p>
+					Mapito facilitates the creation and embedding of a map with custom controls.
+					Mapito using multiple map services such as Google Maps and Bing Maps and allows the one-click switching between of these map services without affecting the previous settings.
+					The system records the users activity on a map and stores it for later processing and analysis.
+				</p>
+				<p>
+					<a class="btn btn-default" href="#" role="button">Try it &raquo;</a>
+				</p>
+			</div>
+			<div class="col-sm-4 col-md-4">
+				<h2>Route tracking</h2>
+				<p>
+					Route tracking is an additional feature of this system which allows to track routes through a web browser of a smartphone, tablet or any device with GPS and HTML5 Geolocation support. 
+					GPS Track Smoothing is an another useful feature provided by Mapito and designed to remove outliers in trace data.
+				</p>
+				<p>
+					<a class="btn btn-default" href="#" role="button">Try it &raquo;</a>
+				</p>
+			</div>
+			<div class="col-sm-4 col-md-4">
+				<h2>API</h2>
+				<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in,
+					egestas eget quam. Vestibulum id ligula porta felis euismod semper.
+					Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum
+					nibh, ut fermentum massa justo sit amet risus.
+				</p>
+				<p>
+					<a class="btn btn-default" href="#" role="button">View details &raquo;</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	<!-- /container -->
+
+
+
+
+
+
+	<div class="modal fade log-in-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-center">
+			<div class="modal-content ">
+				<div class="modal-body text-center">
+					<div >
+						<a href="/auth/facebook" class="btn btn-primary loginbtn">
+							<span class="fa fa-facebook fa-lg loginicons"></span>
+							<span>Log in with Facebook</span>
+						</a>
+						<a href="/auth/google" class="btn btn-danger loginbtn">
+							<span class="fa fa-google-plus fa-lg loginicons"></span>
+							<span>Log in with Google+</span>
+						</a>
+					</div>
+					<div>
+						<a class="btn btn-warning loginbtn" id="log-in-with-mail-btn">
+							<span class="fa fa-user loginicons"></span>
+							<span>Log in with Email</span>
+						</a>
+						<div class="text-left" id="log-in-with-mail-form" style="display:none;">
+							<hr>
+							
+							<div class="alert alert-warning" id="warnLogInMsg" role="alert" style="display:none;">Incorrect email or password.</div>
+							
+							<div class="alert alert-danger" id="errorLogInMsg" role="alert" style="display:none;">
+								An unexpected error has occurred. Please try again later. <br> If this problem continues, please contact with system administrator.
+							</div>
+							
+							<form action="/connect/local" method="post" id="sign-in-form">
+								<div class="form-group" >
+									<label>Email:</label>
+									<input type="text" class="form-control" name="email">
+								</div>
+								<div class="form-group">
+									<label>Password:</label>
+									<input type="password" class="form-control" name="password">
+								</div>
+						
+								<button type="submit" class="btn btn-warning">Login</button>
+								<a href="#" data-dismiss="modal" data-toggle="modal" data-target=".forgot-password-modal">Forgot your password?</a>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<span>Don't have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target=".sign-up-modal">Sign up</a></span> 
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade sign-up-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-center">
+			<div class="modal-content ">
+				<div class="modal-body text-center">
+					<div >
+						<a href="/auth/facebook" class="btn btn-primary loginbtn">
+							<span class="fa fa-facebook fa-lg loginicons"></span>
+							<span>Sign up with Facebook</span>
+						</a>
+						<a href="/auth/google" class="btn btn-danger loginbtn">
+							<span class="fa fa-google-plus fa-lg loginicons"></span>
+							<span>Sign up with Google+</span>
+						</a>
+					</div>
+					<div>
+						<a class="btn btn-warning loginbtn" id="sign-up-with-mail-btn">
+							<span class="fa fa-user loginicons"></span>
+							<span>Sign up with Email</span>
+						</a>
+						<div class="text-left" id="sign-up-with-mail-form" style="display:none;">
+							<hr>
+							<div class="alert alert-warning" id="warnSignUpMsg" role="alert" style="display: none;">
+								That email is already taken.
+							</div>
+							
+							<div class="alert alert-danger" id="errorSignUpMsg" role="alert" style="display: none;">
+								An unexpected error has occurred. Please try again later. <br>
+								If this problem continues, please contact with system
+								administrator.
+							</div>
+							
+							<form action="/signup" method="post" id="sign-up-form">
+								<div class="form-group" >
+									<label for="name">Full name:</label>
+									<input type="text" class="form-control" name="name" id="name">
+									<p class="text-warning"></p>
+								</div>
+								<div class="form-group" >
+									<label for="email">Email:</label>
+									<input type="text" class="form-control" name="email" id="email">
+									<p class="text-warning"></p>
+								</div>
+								<div class="form-group">
+									<label for="password">Password:</label>
+									<input type="password" class="form-control" name="password" id="password">
+									<label for="confirm-password">Confirm your password:</label>
+									<input type="password" class="form-control" name="confirmpassword" id="confirm-password">
+									<p class="text-warning"></p>
+								</div>
+						
+								<button type="submit" class="btn btn-warning">Sign up</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<span>Already have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target=".log-in-modal">Sign in</a></span> 
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade forgot-password-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-center">
+			<div class="modal-content ">
+				<div class="modal-body text-center">
+					<div>
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">Reset Password </h4>
+						</div>
+						<div class="text-left" id="forgot-password-form-div">
+			
+							<div class="alert alert-warning" id="warnForgotPasswordMsg" role="alert" style="display: none;">
+								This email not exists.
+							</div>
+							
+							<div class="alert alert-danger" id="errorForgotPasswordMsg" role="alert" style="display: none;">
+								An unexpected error has occurred. Please try again later. <br>
+								If this problem continues, please contact with system
+								administrator.
+							</div>
+							<br>
+							<p>
+							Enter the email address associated with your account, and we'll email you a link to reset your password.
+							</p>
+							<form method="post" id="forgot-password-form">
+								<div class="form-group" >
+									<label for="email">Email:</label>
+									<input type="text" class="form-control" name="email" id="reset-email">
+									<p class="text-warning"></p>
+								</div>
+						
+								<button type="submit" class="btn btn-warning">Submit</button>
+							</form>
+						</div>
+						<div id="forgot-password-success-div" style="display:none;">
+							<br>A link to reset your password has been sent to <span id="reset-password-email"></span>.
+						</div>
+						
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<span>Back to <a href="#" data-dismiss="modal" data-toggle="modal" data-target=".log-in-modal">Sign in</a></span> 
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<% include ./partials/footer %>
+	
+</div>
+
+</body>
+</html>

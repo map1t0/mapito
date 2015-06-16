@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>API - Mapito.org</title>
+<% include ./partials/static-css-js %>
+<style>
+pre {
+  overflow: auto;
+  word-wrap: normal;
+  white-space: pre;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="container">
+		<% include ./partials/header %>
+
+            <div class="container">
+        		<% include ./partials/header %>
+                <div class="container">
+                    <% include ./partials/header %>
+                        <div class="page-header">
+                            <h1 id="dashboard-title">Mapito JavaScript API</h1>
+                        </div>
+                        <div>
+
+                        <h3>Adding marker</h3>
+                        <pre><code>
+MapitoMapLoaded("MAP_ID", function () {
+    var marker = new MapitoMarker({lat: "LATITUDE", lon: "LONGITUDE"}, mapitoMaps[MAP_ID], { icon: "URL" });
+})
+                        </code></pre>
+
+                        <br>
+
+                        <h3>Adding circle</h3>
+                        <pre><code>
+MapitoMapLoaded("MAP_ID", function () {
+    var circle = new MapitoCircle({lat: "LATITUDE", lon: "LONGITUDE"}, mapitoMaps[MAP_ID], {
+        fillColor: "HEX COLOR",
+        fillOpacity: "0.0 - 1.0",
+        strokeColor: "HEX COLOR",
+        strokeOpacity: "0.0 - 1.0",
+        strokeWeight: "NUMBER"
+    });
+})
+                        </code></pre>
+
+                        <br>
+
+                        <h3>Get real map object from map provider</h3>
+                        <pre><code>
+MapitoMapLoaded("MAP_ID", function () {
+    var realObj = mapitoMaps[MAP_ID].getMap();
+})
+                        </code></pre>
+        			</div>
+                </div>
+			</div>
+            <br>
+            <br>
+
+
+		<% include ./partials/footer %>
+	</div>
+	<% include ./partials/googleanalytics %>
+</body>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mapito.org - UI Elements</title>
+	<% include ./partials/static-css-js %>
+	<script src="/javascript/ui_elements.js"></script>
+	<script src="/javascript/jscolor/jscolor.js"></script>
+	<script src="../javascript/mapito.js"></script>
+	<link href="../stylesheets/ui_elements.css" rel="stylesheet">
+</head>
+
+<body>
+	<% include ./partials/header %>
+
+	<!-- subnav here -->
+	<div class="navbar subnav" role="navigation">
+	    <div class="navbar-inner">
+	        <div class="container text-center">
+	        	<div class="btn-group" role="group">
+
+	        		<button class="btn btn-default btn-sm" type="button" tabindex="-1" data-toggle="modal" data-target="#initializationModal">
+						<span class="visible-xs">Init</span><span class="hidden-xs">Initialization</span>
+					</button>
+
+					<button class="btn btn-default btn-sm" type="button" tabindex="-1" data-toggle="modal" data-target="#standardControlsModal">
+						<span class="visible-xs">Standard</span><span class="hidden-xs">Standard Controls</span>
+					</button>
+
+					<div class="btn-group" role="group">
+						<button class="btn btn-default dropdown-toggle btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+							<span class="visible-xs">Custom <span class="caret"></span></span><span class="hidden-xs">Custom Controls <span class="caret"></span></span>
+						</button>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#panControlModal">Custom Pan Control</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#zoomControlModal">Custom Zoom Control</a></li>
+						</ul>
+					</div>
+
+					<div class="btn-group" role="group">
+						<button class="btn btn-default dropdown-toggle btn-sm" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+							<span class="visible-xs">Draw <span class="caret"></span></span><span class="hidden-xs">Drawing <span class="caret"></span></span>
+						</button>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#markerModal">Marker</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#circleModal">Circle</a></li>
+						</ul>
+					</div>
+
+					<% if (category == "tracking") { %>
+					<button class="btn btn-default btn-sm" type="button" tabindex="-1" data-toggle="modal" data-target="#routeTrackingModal">
+						<span class="visible-xs">Track</span><span class="hidden-xs">Tracking</span>
+					</button>
+					<% } %>
+	    		</div>
+			</div>
+		</div>
+	</div>
+ 		<!-- //subnav -->
+
+	<div id="savedMsg" aria-label="Close">
+		Changes has been saved!
+	</div>
+
+	<div class="alert alert-danger" id="errorMsg" role="alert" aria-label="Close">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4>You got an error!</h4>
+		<p>An unexpected error has occurred. Please try again later. </p>
+		<p>If this problem continues, please contact with system administrator.</p>
+		<br>
+		<button type="button" class="btn btn-default btn-sm" onclick="$(this).alert('close')">Ok</button>
+	</div>
+
+	<div id="hidden-inputs">
+		<input type="hidden" id="map-data" value="<%=JSON.stringify(map)%>">
+	</div>
+
+	<div id="map">
+		<div style="position:relative;" id="map-canvas"></div>
+	</div>
+
+	<div class="modal fade" id="initializationModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Initialization</h4>
+				</div>
+				<div class="modal-body">
+					<form method="post" id="map-initialization-form">
+						<input type="hidden" name="mapid" value="<%=map._id%>">
+
+						<h4>Choose with which method the map will be centered:</h4>
+						<div style="padding:15px;">
+
+							<div class="form-group">
+								<label for="method-geolocation">HTML5 Geolocation</label>
+								<input type="radio" id="method-geolocation" name="method" value="1">
+							</div>
+
+							<div class="form-group">
+								<label for="method-ip">IP-based Geolocation</label>
+								<input type="radio" id="method-ip" name="method" value="2">
+							</div>
+
+							<div class="form-group">
+								<label for="method-static">Static location</label>
+								<input type="radio" id="method-static" name="method" value="3">
+
+								<div class="form-inline" style="display:none;padding:15px;" id="center-lat-lon">
+									<label for="center-latitude"> Latitude: </label>
+									<input type="text" class="form-control center-inputs input-sm" id="center-latitude" name="centerlatitude">
+
+									<label for="center-longitude"> Longitude: </label>
+									<input type="text" class="form-control center-inputs input-sm" id="center-longitude" name="centerlongitude">
+
+									<button type="button" class="btn btn-default btn-sm" onclick="getAndSetCenterInputs()"><i class="fa fa-refresh"></i></button>
+								</div>
+							</div>
+						</div>
+
+
+						<h4>Initial map zoom:</h4>
+						<div style="padding:15px;">
+							<div class="form-group form-inline">
+								<label for="center-zoom" >Zoom level: </label>
+								<input type="number" class="form-control input-sm" id="center-zoom" name="zoom" min="1" max="20">
+								<button type="button" class="btn btn-default btn-sm" onclick="getAndSetZoomInput()"><i class="fa fa-refresh"></i></button>
+							</div>
+						</div>
+
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" data-loading-text="Saving..." id="save-initialization">Save</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<div class="modal fade" id="standardControlsModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Standard Controls</h4>
+				</div>
+				<div class="modal-body">
+					<form id="standard-controls-form">
+
+					 	<h4>Mouse controls</h4>
+
+					 	<input type="hidden" value="<%=mapId%>" name="mapId"/>
+					 	<div class="form-group">
+							<label>
+								<input type="checkbox" id="scroll-zoom-control" name="scrollZoomControl"> Scroll Zoom
+							</label>
+						</div>
+						<div class="form-group">
+							<label>
+								<input type="checkbox" id="dbclick-zoom-control" name="dbclickZoomControl" > DoubleClick Zoom
+							</label>
+						</div>
+						<div class="form-group">
+							<label>
+								<input type="checkbox" id="mouse-pan-control" name="mousePan"> Mouse Pan
+							</label>
+						</div>
+
+						<h4>UI controls</h4>
+
+						<div class="form-group">
+							<label>
+								<input type="checkbox" id="standard-zoom-control" class="standard-zoom-control" name="standardZoomControl"> Zoom
+							</label>
+								<% if (map.service == "google") { %>
+									| Position:
+									<select class="standard-zoom-control" id="standard-zoom-control-position" name="standardZoomControlPosition">
+										<option value="LEFT_CENTER">left-center</option>
+										<option value="LEFT_BOTTOM">left-bottom</option>
+										<option value="LEFT_TOP">left-top</option>
+										<option value="BOTTOM_CENTER">bottom-center</option>
+										<option value="BOTTOM_LEFT">bottom-left</option>
+										<option value="BOTTOM_RIGHT">bottom-right</option>
+										<option value="RIGHT_BOTTOM">right-bottom</option>
+										<option value="RIGHT_CENTER">right-center</option>
+										<option value="RIGHT_TOP">right-top</option>
+										<option value="TOP_CENTER">top-center</option>
+										<option value="TOP_LEFT">top-left</option>
+										<option value="TOP_RIGHT">top-right</option>
+									</select>
+									| Style:
+									<select class="standard-zoom-control" id="standard-zoom-control-style" name="standardZoomControlStyle">
+										<option value="DEFAULT">default</option>
+										<option value="LARGE">large</option>
+										<option value="SMALL">small</option>
+									</select>
+								<% } %>
+						</div>
+						<div class="form-group">
+							<label>
+								<input type="checkbox" class="standard-pan-control"	id="standard-pan-control" name="standardPanControl"> Pan
+							</label>
+							<% if (map.service == "google") { %>
+								| Position:
+								<select	class="standard-pan-control" id="standard-pan-control-position" name="standardPanControlPosition">
+									<option value="LEFT_TOP">left-top</option>
+									<option value="LEFT_BOTTOM">left-bottom</option>
+									<option value="LEFT_CENTER">left-center</option>
+									<option value="BOTTOM_CENTER">bottom-center</option>
+									<option value="BOTTOM_LEFT">bottom-left</option>
+									<option value="BOTTOM_RIGHT">bottom-right</option>
+									<option value="RIGHT_BOTTOM">right-bottom</option>
+									<option value="RIGHT_CENTER">right-center</option>
+									<option value="RIGHT_TOP">right-top</option>
+									<option value="TOP_CENTER">top-center</option>
+									<option value="TOP_LEFT">top-left</option>
+									<option value="TOP_RIGHT">top-right</option>
+								</select>
+							<% } %>
+						</div>
+						<div class="form-group">
+							<label>
+								<input type="checkbox" class="standard-maptype-control" id="map-type-control" name="mapTypeControl"/> Map Type
+							</label>
+							<% if (map.service == "google") { %>
+								| Style:
+								<select class="standard-maptype-control" id="standard-maptype-control-style" name="mapTypeControlStyle">
+									<option value="DEFAULT">default</option>
+									<option value="HORIZONTAL_BAR">horizontal bar</option>
+									<option value="DROPDOWN_MENU">dropdown menu</option>
+								</select>
+								| Position:
+								<select class="standard-maptype-control" id="standard-maptype-control-position" name="mapTypeControlPosition">
+									<option value="TOP_RIGHT">top-right</option>
+									<option value="TOP_CENTER">top-center</option>
+									<option value="TOP_LEFT">top-left</option>
+									<option value="BOTTOM_CENTER">bottom-center</option>
+									<option value="BOTTOM_LEFT">bottom-left</option>
+									<option value="BOTTOM_RIGHT">bottom-right</option>
+									<option value="LEFT_BOTTOM">left-bottom</option>
+									<option value="LEFT_CENTER">left-center</option>
+									<option value="LEFT_TOP">left-top</option>
+									<option value="RIGHT_BOTTOM">right-bottom</option>
+									<option value="RIGHT_CENTER">right-center</option>
+									<option value="RIGHT_TOP">right-top</option>
+								</select>
+							<% } %>
+
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" data-loading-text="Saving..." id="save-standard">Save</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<div class="modal fade" id="panControlModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Custom Pan Control</h4>
+				</div>
+				<div class="modal-body">
+					<form id="custom-pan-control-form">
+						<input type="hidden" value="<%=mapId%>" name="mapId"/>
+						<input type="hidden" value="1" id="action"/>
+
+						<label><input type="checkbox" id="custom-pan-enable" name="custom_pan"/> <span style="font-size:16px;">Enabled</span></label><br>
+
+						<label for="custom-pan-position">Position:</label>
+						<select class="form-control form-inline input-sm" id="custom-pan-position" name="custom_pan_position">
+							<option value="BOTTOM_CENTER">bottom-center</option>
+							<option value="BOTTOM_LEFT">bottom-left</option>
+							<option value="BOTTOM_RIGHT">bottom-right</option>
+							<option value="LEFT_BOTTOM">left-bottom</option>
+							<option value="LEFT_CENTER">left-center</option>
+							<option value="LEFT_TOP">left-top</option>
+							<option value="RIGHT_BOTTOM">right-bottom</option>
+							<option value="RIGHT_CENTER">right-center</option>
+							<option value="RIGHT_TOP">right-top</option>
+							<option value="TOP_CENTER">top-center</option>
+							<option value="TOP_LEFT">top-left</option>
+							<option value="TOP_RIGHT">top-right</option>
+						</select>
+						<hr>
+						<h5><b>Background</b></h5>
+						<div class="form-group">
+							<label for="">Shape:</label>
+							<label class="radio-inline">
+								<input type="radio" name="bgshape" value="circle" checked="checked"> Circle
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="bgshape" value="cross"> Cross
+							</label>
+						</div>
+						<div class="form-group form-inline">
+							<label for="">Color:</label>
+							<input type="text" class="form-control input-sm color {hash:true}" name="bgcolor" value="#222222">
+						</div>
+						<div class="form-group form-inline">
+							<label for="">Size(px):</label>
+							<input type="text" class="form-control input-sm" name="bgsize" value="80">
+						</div>
+
+						<hr>
+						<h5><b>Border</b></h5>
+						<div class="form-group form-inline">
+							<label for="">Width(px):</label>
+							<input type="text" class="form-control input-sm" name="brdrwidth" value="0">
+						</div>
+						<div class="form-group form-inline">
+							<label for="">Color:</label>
+							<input type="text" class="form-control input-sm color {hash:true}" name="brdrcolor" value="#999999">
+						</div>
+
+						<hr>
+						<h5><b>Buttons</b></h5>
+						<div class="form-group">
+							<label>Shape:</label>
+							<label class="radio-inline">
+								<input type="radio" name="btnshape" value="triangle" checked="checked"> Triangles
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="btnshape" value="arrow"> Arrows
+							</label>
+						</div>
+						<div class="form-group form-inline">
+							<label for="">Color:</label>
+							<input type="text" class="form-control input-sm color {hash:true}" name="btncolor" value="#999999">
+						</div>
+						<div class="form-group form-inline">
+							<label for="">Size(px):</label>
+							<input type="text" class="form-control input-sm" name="btnsize" value="10">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="save-custom-pan">Save</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<div class="modal fade" id="zoomControlModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Custom Zoom Control</h4>
+				</div>
+				<div class="modal-body">
+					<form id="custom-zoom-control-form">
+						<input type="hidden" value="<%=mapId%>" name="mapId"/>
+						<input type="hidden" value="1" id="action"/>
+						<label><input type="checkbox" id="custom-zoom-enable" name="custom_zoom"> <span style="font-size:16px;">Enabled</span></label><br>
+
+						<label for="custom-zoom-position">Position:</label>
+						<select class="form-control form-inline input-sm" name="position" id="custom-zoom-position">
+							<option value="BOTTOM_CENTER">bottom-center</option>
+							<option value="BOTTOM_LEFT">bottom-left</option>
+							<option value="BOTTOM_RIGHT">bottom-right</option>
+							<option value="LEFT_BOTTOM">left-bottom</option>
+							<option value="LEFT_CENTER">left-center</option>
+							<option value="LEFT_TOP">left-top</option>
+							<option value="RIGHT_BOTTOM">right-bottom</option>
+							<option value="RIGHT_CENTER">right-center</option>
+							<option value="RIGHT_TOP">right-top</option>
+							<option value="TOP_CENTER">top-center</option>
+							<option value="TOP_LEFT">top-left</option>
+							<option value="TOP_RIGHT">top-right</option>
+						</select>
+						<hr>
+						<h5><b>Background</b></h5>
+						<div class="form-group form-inline">
+							<label for="">Color:</label>
+							<input type="text" class="form-control input-sm color {hash:true}" name="bgcolor" value="#222222">
+						</div>
+						<div class="form-group form-inline">
+							<label for="">Length(px):</label>
+							<input type="text" class="form-control input-sm" name="bglength" value="70">
+						</div>
+						<div class="form-group">
+							<label for="">Layout:</label>
+							<label class="radio-inline">
+								<input type="radio" name="bglayout" value="vertical" checked="checked"> Vertical
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="bglayout" value="horizontal"> Horizontal
+							</label>
+						</div>
+
+						<hr>
+						<h5><b>Border</b></h5>
+						<div class="form-group form-inline">
+							<label for="">Width(px):</label>
+							<input type="text" class="form-control input-sm" name="brdrwidth" value="0">
+						</div>
+						<div class="form-group form-inline">
+							<label for="">Color:</label>
+							<input type="text" class="form-control input-sm color {hash:true}" name="brdrcolor" value="#999999">
+						</div>
+
+						<hr>
+						<h5><b>Buttons</b></h5>
+						<div class="form-group form-inline">
+							<label for="">Color:</label>
+							<input type="text" class="form-control input-sm color {hash:true}" name="btncolor" value="#999999">
+						</div>
+						<div class="form-group form-inline">
+							<label for="">Size(px):</label>
+							<input type="text" class="form-control input-sm" name="btnsize" value="25">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="save-custom-zoom">Save</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!----------------------------
+	------- DRAWING MODALS -------
+	----------------------------->
+	<div class="modal fade" id="circleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Circle</h4>
+				</div>
+				<div class="modal-body">
+					<form id="add-circle-form">
+						<input type="hidden" id="map-id" value="<%=mapId%>" name="mapId"/>
+						<input type="hidden" value="1" id="action"/>
+						<div class="form-group">
+							<label for="">Position (latitude,longitude):</label>
+							<input type="text" class="form-control circle-settings input-sm" id="circle-position">
+						</div>
+						<div class="form-group">
+							<label for="">Color:</label>
+							<input type="text" class="form-control circle-settings input-sm color {hash:true}" id="circle-fillColor" value="#0033FF">
+						</div>
+						<div class="form-group">
+							<label for="">Opacity:</label>
+							<input type="text" class="form-control circle-settings input-sm" id="circle-fillOpacity" value="0.35">
+						</div>
+						<div class="form-group">
+							<label for="">Border color:</label>
+							<input type="text" class="form-control circle-settings input-sm color {hash:true}" id="circle-strokeColor" value="#0033FF">
+						</div>
+						<div class="form-group">
+							<label for="">Border opacity:</label>
+							<input type="number" class="form-control circle-settings input-sm" id="circle-strokeOpacity" value="0.8">
+						</div>
+						<div class="form-group">
+							<label for="">Border weight:</label>
+							<input type="text" class="form-control circle-settings input-sm" id="circle-strokeWeight" value="2">
+						</div>
+
+						<div class="form-group">
+							<label for="">Radius (in meters):</label>
+							<input type="text" class="form-control circle-settings input-sm" id="circle-radius" value="1000">
+						</div>
+					</form>
+
+					<hr>
+					<div id="modal-map" style="position:relative;width:100%;height:200px;"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="save-circle">Save</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" id="delete-circle" style="display:none;">Delete</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<div class="modal fade" id="markerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Marker</h4>
+				</div>
+				<div class="modal-body">
+					<form id="add-marker-form">
+						<input type="hidden" value="1" id="action"/>
+						<div class="form-group">
+							<label for="">Position (latitude,longitude):</label>
+							<input type="text" class="form-control marker-settings input-sm" id="marker-position">
+						</div>
+						<div class="form-group">
+							<label for="">Icon url:</label>
+							<input type="text" class="form-control marker-settings input-sm" id="marker-icon-url" >
+						</div>
+
+
+						<select style="display:none;" id="circles-select"></select>
+					</form>
+					<hr>
+					<div id="marker-modal-map" style="position:relative;width:100%;height:200px;"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="save-marker">Save</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal" id="delete-marker" style="display:none;">Delete</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<div class="modal fade" id="routeTrackingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Route tracking</h4>
+				</div>
+				<div class="modal-body">
+					<form id="route-tracking-form">
+						<input type="hidden" name="mapId" value="<%=map._id%>" />
+						<div class="form-group">
+							<!-- <input type="checkbox" class="start-control" id="start-control" name="startStopControl"/>  -->
+							Start/Stop | Position:
+							<select class="start-control" id="start-control-position" name="startStopControlPosition">
+								<option value="BOTTOM_CENTER">bottom-center</option>
+								<option value="BOTTOM_LEFT">bottom-left</option>
+								<option value="BOTTOM_RIGHT">bottom-right</option>
+								<option value="LEFT_BOTTOM">left-bottom</option>
+								<option value="LEFT_CENTER">left-center</option>
+								<option value="LEFT_TOP">left-top</option>
+								<option value="RIGHT_BOTTOM">right-bottom</option>
+								<option value="RIGHT_CENTER">right-center</option>
+								<option value="RIGHT_TOP">right-top</option>
+								<option value="TOP_CENTER">top-center</option>
+								<option value="TOP_LEFT">top-left</option>
+								<option value="TOP_RIGHT">top-right</option>
+							</select>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="save-route-tracking">Save</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+
+
+	<% include ./partials/footer %>
+
+	<% include ./partials/googleanalytics %>
+</body>
+</html>

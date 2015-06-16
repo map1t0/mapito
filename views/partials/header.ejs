@@ -1,0 +1,57 @@
+<% curuser = (typeof user != "undefined") ? (user.local.email || user.facebook.email || user.google.email) : null %>
+
+<nav class="navbar navbar-default navbar-fixed-top header" role="navigation">
+    <% if (curuser) { %>
+    <div class="container-fluid">
+    <% } else { %>
+    <div class="container">
+    <% } %>
+        <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/<%=(typeof category != 'undefined')?category:''%>"><img src="/images/mapito-logo.png"></a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+          <% if (typeof mapId != "undefined") { %>
+        	<ul class="nav navbar-nav">
+        		<li id="navbar-settings"><a href="/<%=category%>/settings?mapId=<%=mapId%>">Settings</a></li>
+        		<li id="navbar-ui"><a href="/<%=category%>/ui_elements?mapId=<%=mapId%>">UI Elements</a></li>
+        		<li id="navbar-embed"><a href="/<%=category%>/embed?mapId=<%=mapId%>">Embed</a></li>
+                <% if (typeof category != "undefined" && category == "maps") { %>
+                <li id="navbar-download"><a href="/data_download?mapId=<%=mapId%>">Download</a></li>
+                <% } %>
+        		<% if (typeof category != "undefined" && category == "tracking") { %>
+        		<li id="navbar-routes"><a href="/<%=category%>/routes?mapId=<%=mapId%>">Routes</a></li>
+        		<% } %>
+        	</ul>
+          <% } %>
+          <% if (curuser) { %>
+        	<ul class="nav navbar-nav navbar-right">
+        		<li id="navbar-api"><a href="/apis">API</a></li>
+        		<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=curuser%><span class="caret"></span></a>
+        			<ul class="dropdown-menu" role="menu">
+        				<% if (typeof category != "undefined" && category == "tracking") { %>
+        				<li><a href="/maps">Switch to Maps</a></li>
+        				<% } else { %>
+        				<li><a href="/tracking">Switch to Tracking</a></li>
+        				<% } %>
+        				<li><a href="/user/account">Account settings</a></li>
+        				<li><a href="/logout">Log out</a></li>
+        			</ul>
+        		</li>
+        	</ul>
+        <% } else { %>
+        	<ul class="nav navbar-nav navbar-right">
+        		<li><a href="#login" class="btn btn-default" data-toggle="modal" data-target=".log-in-modal">Login</a></li>
+        		<li><a href="#signup" class="btn btn-default"  data-toggle="modal" data-target=".sign-up-modal">Sign up</a></li>
+        	</ul>
+        <% } %>
+        </div>
+    </div>
+</nav>

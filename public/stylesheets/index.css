@@ -1,0 +1,87 @@
+
+.modal-body {
+	padding:15px;
+}
+
+.loginbtn {
+	width: 100%;
+	margin: 4px 0px;;
+	font-size: 16px;
+	font-weight: bold;
+	vertical-align: middle;
+	padding: 10px;
+}
+
+.header .btn {
+	padding: 6px 12px;
+	margin: 8px 2px;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.loginicons {
+	position: absolute;
+	left: 30px;
+	margin-top: 4px;
+}
+
+.modal-dialog-center {
+	margin-top: 10%;
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.hide {
+	display: none;
+}
+
+.github-icon {
+	font-size:34px;
+	color:#777777;
+}
+
+.github-icon:hover {
+	color:#a4a4a4;
+}
+
+#index-blue {
+	padding: 50px 0;
+	height:400px;
+	background-color:#368ECA;
+	color: #f8f8f8;
+	font-size: 20px;
+}
+
+#index-blue-text{
+	padding-top: 50px;
+}
+
+#index-blue h1 {
+	font-size: 45px;
+}
+
+@media screen and (max-width: 600px) {
+	#index-blue {
+		font-size: 16px;
+	}
+	#index-blue h1 {
+		font-size: 35px;
+	}
+	#index-blue-text{
+		padding-top: 10px;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	#index-blue {
+		padding: 30px 0;
+		font-size: 16px;
+	}
+	#index-blue h1 {
+		font-size: 30px;
+	}
+	#index-blue-text{
+		padding-top: 10px;
+	}
+}

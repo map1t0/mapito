@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Mapito.org - Routes</title>
+<% include ./partials/static-css-js %>
+<script src="/javascript/mapito.js"></script>
+<script src="/javascript/routes.js"></script>
+<style>
+body {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+.row {
+    height: 90%;
+}
+
+.left-side {
+    height: 100%;
+}
+
+#map-wrapper {
+    position: absolute;
+    bottom:0;
+    top:0;
+    left:20px;
+    right:0;
+}
+.modal-backdrop {
+	background: none;
+}
+
+#mapito-map {
+    width: 100%;
+    height: 100%;
+	margin:0;
+}
+</style>
+
+</head>
+
+<body>
+	<% include ./partials/header %>
+
+	<br>
+
+	<div id="hidden-inputs">
+		<input type="hidden" id="map-data" value="<%=JSON.stringify(map)%>">
+        <input type="hidden" id="routes-data" value="<%=JSON.stringify(routes)%>">
+	</div>
+
+	<div class="row">
+		<div class="hidden-xs col-sm-7 col-md-8 left-side">
+            <div id="map-wrapper">
+                <div id="mapito-map"></div>
+            </div>
+		</div>
+
+		<div class="main col-xs-12 col-sm-5 col-md-4 right-side">
+
+			<form action="/gpx_download" method="post" style="padding: 0 50px;">
+
+			<% if (routes.length > 0) { %>
+
+				<% for (var i=0 ;i<routes.length;i++) { %>
+
+					<div class="radio">
+  						<label>
+  						<% if (i == 0) { %>
+							<input type=radio name="route_id" value="<%=routes[i]._id%>" checked/>
+						<% } else { %>
+							<input type=radio name="route_id" value="<%=routes[i]._id%>" />
+						<% } %>
+                        Route(<%=routes[i].name%>)
+                        <span id="<%=routes[i]._id%>">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						</label>
+					</div>
+
+				<% } %>
+				<button type="submit" class="btn btn-primary" id="routes">Download</button>
+                <button type="submit" class="btn btn-primary" id="smooth">Smooth</button>
+			<% } else { %>
+				<BR>
+				No routes found.
+				<br><br>
+				<button type="submit" class="btn btn-primary" id="routes" disabled="disabled">Download</button>
+                <button type="submit" class="btn btn-primary" id="smooth" disabled="disabled">Smooth</button>
+			<% } %>
+
+			</form>
+
+		</div>
+	</div>
+
+
+    <div class="modal fade" id="smoothModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Smoothing</h4>
+				</div>
+				<div class="modal-body">
+					<div id="modal-map" style="position:relative;width:100%;height:450px;;"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<a type="button" class="btn btn-primary" id="smooth-download" href="/">Download</a>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<% include ./partials/footer %>
+
+	<% include ./partials/googleanalytics %>
+</body>
+</html>

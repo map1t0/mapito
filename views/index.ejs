@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Mapito.org</title>
+	<% include ./partials/static-css-js %>
+	<link href="/stylesheets/index.css" rel="stylesheet">
+	<script src="/javascript/index.js"></script>
+</head>
+
+<body>
+	<% include ./partials/googleanalytics %>
+
+	<% include ./partials/header %>
+
+	<div id="index-blue">
+		<div class="container text-center">
+			<h1>Welcome to Mapito.org!</h1>
+			<div id="index-blue-text">
+				Mapito.org is an open data and open source GIS system with an API that facilitates the development of Web services and Mobile Apps.
+				Mapito.org is creating an abstraction layer above the generic services offered by the major web-based GIS systems, in order to facilitate the migration of the user applications to new services.
+			</div>
+		</div>
+	</div>
+
+
+	<div id="options">
+		<div class="container">
+			<!-- Example row of columns -->
+			<div class="row text-center">
+				<div class="col-sm-4 col-md-4">
+					<h2>Maps</h2>
+					<p>
+						Mapito facilitates the creation and embedding of a map with custom controls.
+						Mapito using multiple map services such as Google Maps and Bing Maps and allows the one-click switching between of these map services without affecting the previous settings.
+						The system records the users activity on a map and stores it for later processing and analysis.
+					</p>
+					<p>
+						<a class="btn btn-default" id="try-simple-maps" href="#" data-toggle="modal" data-target=".sign-up-modal">Try it &raquo;</a>
+					</p>
+				</div>
+				<div class="col-sm-4 col-md-4">
+					<h2>Route tracking</h2>
+					<p>
+						Route tracking is an additional feature of this system which allows to track routes through a web browser of a smartphone, tablet or any device with GPS and HTML5 Geolocation support.
+						GPS Track Smoothing is an another useful feature provided by Mapito and designed to remove outliers in trace data.
+					</p>
+					<p>
+						<a class="btn btn-default" id="try-gps-tracking" href="#" data-toggle="modal" data-target=".sign-up-modal">Try it &raquo;</a>
+					</p>
+				</div>
+				<div class="col-sm-4 col-md-4">
+					<h2>API</h2>
+					<p>
+						Mapito provides two APIs.
+						A JavaScript API that's designed for developers who use embedded Mapito Maps and provides methods to edit the maps.
+						A HTTP API which is designed for web and mobile developers and provides all options of Mapito via HTTP requests and more options, such as for storing and retrieving gps routes.
+					</p>
+					<p>
+						<a class="btn btn-default" id="view-api" href="#"  data-toggle="modal" data-target=".sign-up-modal">View details &raquo;</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<!-- /container -->
+	</div>
+
+
+	<div class="modal fade log-in-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-center">
+			<div class="modal-content ">
+				<div class="modal-body text-center">
+					<div >
+						<a href="/auth/facebook" class="btn btn-primary loginbtn">
+							<span class="fa fa-facebook fa-lg loginicons"></span>
+							<span>Log in with Facebook</span>
+						</a>
+						<a href="/auth/google" class="btn btn-danger loginbtn">
+							<span class="fa fa-google-plus fa-lg loginicons"></span>
+							<span>Log in with Google+</span>
+						</a>
+					</div>
+					<div>
+						<a class="btn btn-warning loginbtn" id="log-in-with-mail-btn">
+							<span class="fa fa-user loginicons"></span>
+							<span>Log in with Email</span>
+						</a>
+						<div class="text-left" id="log-in-with-mail-form" style="display:none;">
+							<hr>
+
+							<div class="alert alert-warning" id="warnLogInMsg" role="alert" style="display:none;">Incorrect email or password.</div>
+
+							<div class="alert alert-danger" id="errorLogInMsg" role="alert" style="display:none;">
+								An unexpected error has occurred. Please try again later. <br> If this problem continues, please contact with system administrator.
+							</div>
+
+							<form action="/connect/local" method="post" id="sign-in-form">
+								<div class="form-group" >
+									<label>Email:</label>
+									<input type="text" class="form-control" name="email">
+								</div>
+								<div class="form-group">
+									<label>Password:</label>
+									<input type="password" class="form-control" name="password">
+								</div>
+
+								<button type="submit" class="btn btn-warning">Login</button>
+								<a href="#" data-dismiss="modal" data-toggle="modal" data-target=".forgot-password-modal">Forgot your password?</a>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<span>Don't have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target=".sign-up-modal">Sign up</a></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade sign-up-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-center">
+			<div class="modal-content ">
+				<div class="modal-body text-center">
+					<div >
+						<a href="/auth/facebook" class="btn btn-primary loginbtn">
+							<span class="fa fa-facebook fa-lg loginicons"></span>
+							<span>Sign up with Facebook</span>
+						</a>
+						<a href="/auth/google" class="btn btn-danger loginbtn">
+							<span class="fa fa-google-plus fa-lg loginicons"></span>
+							<span>Sign up with Google+</span>
+						</a>
+					</div>
+					<div>
+						<a class="btn btn-warning loginbtn" id="sign-up-with-mail-btn">
+							<span class="fa fa-user loginicons"></span>
+							<span>Sign up with Email</span>
+						</a>
+						<div class="text-left" id="sign-up-with-mail-form" style="display:none;">
+							<hr>
+							<div class="alert alert-warning" id="warnSignUpMsg" role="alert" style="display: none;">
+								That email is already taken.
+							</div>
+
+							<div class="alert alert-danger" id="errorSignUpMsg" role="alert" style="display: none;">
+								An unexpected error has occurred. Please try again later. <br>
+								If this problem continues, please contact with system
+								administrator.
+							</div>
+
+							<form action="/signup" method="post" id="sign-up-form">
+								<div class="form-group" >
+									<label for="name">Full name:</label>
+									<input type="text" class="form-control" name="name" id="name">
+									<p class="text-warning"></p>
+								</div>
+								<div class="form-group" >
+									<label for="email">Email:</label>
+									<input type="text" class="form-control" name="email" id="email">
+									<p class="text-warning"></p>
+								</div>
+								<div class="form-group">
+									<label for="password">Password:</label>
+									<input type="password" class="form-control" name="password" id="password">
+									<label for="confirm-password">Confirm your password:</label>
+									<input type="password" class="form-control" name="confirmpassword" id="confirm-password">
+									<p class="text-warning"></p>
+								</div>
+
+								<button type="submit" class="btn btn-warning">Sign up</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<span>Already have an account? <a href="#" data-dismiss="modal" data-toggle="modal" data-target=".log-in-modal">Login</a></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade forgot-password-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm modal-dialog-center">
+			<div class="modal-content ">
+				<div class="modal-body text-center">
+					<div>
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">Reset Password </h4>
+						</div>
+						<div class="text-left" id="forgot-password-form-div">
+
+							<div class="alert alert-warning" id="warnForgotPasswordMsg" role="alert" style="display: none;">
+								This email not exists.
+							</div>
+
+							<div class="alert alert-danger" id="errorForgotPasswordMsg" role="alert" style="display: none;">
+								An unexpected error has occurred. Please try again later. <br>
+								If this problem continues, please contact with system
+								administrator.
+							</div>
+							<br>
+							<p>
+							Enter the email address associated with your account, and we'll email you a link to reset your password.
+							</p>
+							<form method="post" id="forgot-password-form">
+								<div class="form-group" >
+									<label for="email">Email:</label>
+									<input type="text" class="form-control" name="email" id="reset-email">
+									<p class="text-warning"></p>
+								</div>
+
+								<button type="submit" class="btn btn-warning">Submit</button>
+							</form>
+						</div>
+						<div id="forgot-password-success-div" style="display:none;">
+							<br>A link to reset your password has been sent to <span id="reset-password-email"></span>.
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer text-center">
+					<span>Back to <a href="#" data-dismiss="modal" data-toggle="modal" data-target=".log-in-modal">Login</a></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<footer>
+		<div class="container">
+			<p>
+				Mapito.org was created as part of the undergraduate thesis titled "Design and implementation of a web application for recording and analyzing users’ actions on digital geographical maps" in Department of Informatics, Ionian University, Corfu, Greece.
+			</p>
+			<p>
+				<a class="github-icon" href="https://github.com/map1t0/mapito" target="_blank"><i class="fa fa-github"></i></a>
+			</p>
+			<p>
+				Copyright &copy; 2015 Mapito.org
+			</p>
+		</div>
+	</footer>
+</body>
+</html>

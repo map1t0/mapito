@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>JavaScript API - Mapito.org</title>
+<% include ./partials/static-css-js %>
+<style>
+pre {
+  overflow: auto;
+  word-wrap: normal;
+  white-space: pre;
+  background-color: #ffffff;
+}
+.table-endpoint tr td:first-child {
+    width: 120px;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="container">
+		<% include ./partials/header %>
+			<div class="page-header">
+				<h1 id="dashboard-title">Mapito HTTP API v1</h1>
+			</div>
+			<div>
+
+			<h2>Authentication</h2>
+			<hr>
+			<p>Mapito API use a Token-based authentication.</p>
+			<p>Each user can create multiple tokens under <a href="/user/access_tokens">Access Tokens</a> in the account menu.</p>
+			<p>The access token should be passed in all API calls in a header.</p>
+			<pre><code>$ curl -H "Authorization: Token ACCESS-TOKEN" https://www.mapito.org/api/v1/....</code></pre>
+
+			<br>
+			<h2>Resources</h2>
+			<hr>
+			<h3>Create map</h3>
+			<p>Create a new map.</p>
+			<br>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>POST</td>
+                        <td>http://www.mapito.org/api/v1/maps</td>
+                    </tr>
+                </table>
+            </div>
+			<br>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                    <tr>
+                        <td>Content-Type</td>
+                        <td>application/json</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <pre><code>
+{
+    name : "Example",
+    service : "google|bing",
+    tracking : true|false
+}
+            </code></pre>
+            <br>
+
+			<div class="panel panel-default">
+				<table class="table">
+					<tr>
+						<th>Key</th>
+						<th>Type</th>
+						<th>Value</th>
+					</tr>
+					<tr>
+						<td>name</td>
+						<td>String</td>
+						<td><b>Required</b>. The name of map.</td>
+					</tr>
+					<tr>
+						<td>service</td>
+						<td>String</td>
+						<td><b>Required</b>. The map service. Acceptable values are <b><i>google</i></b> and <b><i>bing</i></b>.</td>
+					</tr>
+                    <tr>
+						<td>tracking</td>
+						<td>Boolean</td>
+						<td><b>Required</b>. if the map is intended to track routes. Acceptable values are <b><i>true</i></b> and <b><i>false</i></b>.</td>
+					</tr>
+				</table>
+			</div>
+            <h4>Response</h4>
+            <pre><code>
+{
+    status: "ok",
+    map_id: "89072dc865b723b3265e4777"
+}
+            </code></pre>
+
+			<br><hr>
+
+			<h3>Modify map</h3>
+			<p>Modify a map options by map id.</p>
+			<br>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>PUT</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                    <tr>
+                        <td>Content-Type</td>
+                        <td>application/json</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <h4>General settings</h4>
+            <pre><code>
+{
+    name : "Example name",
+    service : "google|bing",
+}
+            </code></pre>
+
+            <div class="panel panel-default">
+                    <table class="table">
+                        <tr>
+                            <th>Key</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>name</td>
+                            <td>String</td>
+                            <td><b>Required</b>. The name of map.</td>
+                        </tr>
+                        <tr>
+                            <td>service</td>
+                            <td>String</td>
+                            <td><b>Required</b>. The map service. Acceptable values are <b><i>google</i></b> and <b><i>bing</i></b>.</td>
+                        </tr>
+                    </table>
+            </div>
+			<br>
+
+            <h4>Map initialization settings</h4>
+            <pre><code>
+{
+    ...
+    initial : {
+        method : "1|2|3",
+        center : {
+            lat : "30.3030",
+            lon : "40.4040"
+        },
+        zoom : "14"
+    }
+    ...
+}
+            </code></pre>
+
+            <div class="panel panel-default">
+                    <table class="table">
+                        <tr>
+                            <th>Key</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>initial.method</td>
+                            <td>Number</td>
+                            <td>
+                                The method who centered the map.<br>
+                                Acceptable values:<br>
+                                <ul>
+                                <li><b><i>1</i></b> for HTML5 Geolocation</li>
+                                <li><b><i>2</i></b> for IP-based. <b>Default value.</b></li>
+                                <li><b><i>3</i></b> for Static location</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>initial.center</td>
+                            <td>Number</td>
+                            <td>
+                                The starting latitude and longitude if you have check as initial method the static location.
+                                Acceptable value a number in decimal degree format.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>initial.zoom</td>
+                            <td>Number</td>
+                            <td>
+                                The starting zoom of map. Acceptable value is a number between <b><i>1</i></b> and <b><i>20</i></b>.<br>Default value is <b>14</b>
+                            </td>
+                        </tr>
+                    </table>
+            </div>
+            <br>
+
+            <h4>Standard controls</h4>
+            <pre><code>
+{
+    ...
+    controls : {
+        standard : {
+            dbclick_zoom : true|false,
+            scrool_zoom : true|false,
+            mouse_pan : true|false,
+            zoom : {
+                enabled : true|false,
+                position : "TOP_LEFT|TOP_CENTER|TOP_RIGHT|RIGHT_TOP|RIGHT_CENTER|RIGHT_BOTTOM|BOTTOM_LEFT|...",
+                style : "DEFAULT|SMALL|LARGE"
+            },
+            pan : {
+                enabled : true|false,
+                position : "TOP_LEFT|TOP_CENTER|TOP_RIGHT|RIGHT_TOP|RIGHT_CENTER|RIGHT_BOTTOM|BOTTOM_LEFT|..."
+            },
+            map_type : {
+                enabled : true|false,
+                position : "TOP_LEFT|TOP_CENTER|TOP_RIGHT|RIGHT_TOP|RIGHT_CENTER|RIGHT_BOTTOM|BOTTOM_LEFT|...",
+                style : "DEFAULT|HORIZONTAL_BAR|DROPDOWN_MENU"
+            }
+        }
+        ...
+    }
+    ...
+}
+            </code></pre>
+
+            <div class="panel panel-default">
+                    <table class="table">
+                        <tr>
+                            <th>Key</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.dbclick_zoom</td>
+                            <td>Boolean</td>
+                            <td>Either <b><i>true</i></b> to enable double click zoom, <b><i>false</i></b> to disable them.<br>Default: <b><i>true</i></b>.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.scrool_zoom</td>
+                            <td>Boolean</td>
+                            <td>Either <b><i>true</i></b> to enable scroll zoom, <b><i>false</i></b> to disable them.<br>Default: <b><i>true</i></b>.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.mouse_pan</td>
+                            <td>Boolean</td>
+                            <td>Either <b><i>true</i></b> to enable mouse pan control, <b><i>false</i></b> to disable them.<br>Default: <b><i>true</i></b>.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.zoom.enabled</td>
+                            <td>Boolean</td>
+                            <td>Either <b><i>true</i></b> to enable zoom control, <b><i>false</i></b> to disable them.<br>Default: <b><i>true</i></b>.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.zoom.position</td>
+                            <td>String</td>
+                            <td>The position of the zoom control.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.zoom.style</td>
+                            <td>String</td>
+                            <td>
+								The style of zoom control.<br>
+								Acceptable values are <b><i>DEFAULT</i></b>, <b><i>SMALL</i></b> and <b><i>LARGE</i></b>.<br>
+								Default value is <b><i>DEFAULT</i></b>.
+							</td>
+                        </tr>
+
+                        <tr>
+                            <td>controls.standard.pan.enabled</td>
+                            <td>Boolean</td>
+                            <td>Either <b><i>true</i></b> to enable pan controls, <b><i>false</i></b> to disable them.<br>Default: <b><i>true</i></b>.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.pan.position</td>
+                            <td>String</td>
+                            <td>The position of the pan control.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.zoom.style</td>
+                            <td>String</td>
+                            <td>
+                            	The style of zoom control.<br>
+                            	Acceptable values are <b><i>DEFAULT</i></b>, <b><i>SMALL</i></b> and <b><i>LARGE</i></b>.<br>
+                            	Default value is <b><i>DEFAULT</i></b>.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>controls.standard.map_type.enabled</td>
+                            <td>Boolean</td>
+                            <td>Either <b><i>true</i></b> to enable map_type control, <b><i>false</i></b> to disable them.<br>Default: <b><i>true</i></b>.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.map_type.position</td>
+                            <td>String</td>
+                            <td>The position of the map_type control.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.standard.map_type.style</td>
+                            <td>String</td>
+                            <td>
+                            	The style of map type control.<br>
+                            	Acceptable values are <b><i>DEFAULT</i></b>, <b><i>HORIZONTAL_BAR</i></b> and <b><i>DROPDOWN_MENU</i></b>.<br>
+                            	Default value is <b><i>DEFAULT</i></b>.
+                            </td>
+                        </tr>
+
+                    </table>
+            </div>
+            <br>
+
+
+            <h4>Custom controls</h4>
+            <pre><code>
+{
+    ...
+    controls : {
+        ...
+        custom: {
+            zoom: {
+            	enabled: true|false,
+            	position: "TOP_LEFT|TOP_CENTER|TOP_RIGHT|RIGHT_TOP|RIGHT_CENTER|RIGHT_BOTTOM|BOTTOM_LEFT|...",
+            	background : {
+                    layout: "horizontal|vertical",
+                    length: 70,
+                    color: "#222222"
+            	},
+            	border : {
+                    width: 0,
+                    color: "#999999"
+            	},
+            	buttons: {
+                    color: "#999999",
+                    size: 25
+            	}
+            },
+            pan: {
+            	enabled: true|false,
+            	position: "TOP_LEFT|TOP_CENTER|TOP_RIGHT|RIGHT_TOP|RIGHT_CENTER|RIGHT_BOTTOM|BOTTOM_LEFT|...",
+            	background : {
+                    shape: "circle|cross",
+                    color: "#222222",
+                    size: 80
+            	},
+            	border : {
+                    width: 0,
+                    color: "#999999"
+            	},
+            	buttons: {
+                    shape: "triangle|arrow",
+                    color: "#999999",
+                    size: 10
+            	}
+            }
+        }
+    }
+    ...
+}
+            </code></pre>
+
+            <div class="panel panel-default">
+                    <table class="table">
+                        <tr>
+                            <th>Key</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>controls.custom.zoom.enabled</td>
+                            <td>Boolean</td>
+                            <td>
+                        		The custom zoom control.<br>
+                        		Either <b><i>true</i></b> to enable the control, <b><i>false</i></b> to disable them.<br>
+                        		Default: <b><i>false</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                            <td>controls.custom.zoom.position</td>
+                            <td>String</td>
+                            <td>The position of custom zoom control.</td>
+                        </tr>
+                        <tr>
+                            <td>controls.custom.zoom.background.color</td>
+                            <td>String</td>
+                            <td>
+                        		The background color of custom zoom control.<br>
+                        		Acceptable value is a color in hexadecimal format.<br>
+                        		Default value is <b><i>#222222</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                            <td>controls.custom.zoom.background.length</td>
+                            <td>String</td>
+                            <td>
+                        		The max length of custom zoom control in pixels.<br>
+                        		Acceptable value is a number.<br>
+                        		Default value is <b><i>70</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                            <td>controls.custom.zoom.background.layout</td>
+                            <td>String</td>
+                            <td>
+                        		The layout of custom zoom control.<br>
+                        		Acceptable values are <b><i>horizontal</i></b> and <b><i>vertical</i></b>.<br>
+                        		Default value is <b><i>vertical</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                            <td>controls.custom.zoom.border.width</td>
+                            <td>Number</td>
+                        	<td>
+                        		The width of border of custom zoom control in pixels.<br>
+                        		Acceptable value is a number.<br>
+                        		Default value is <b><i>0</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.zoom.border.color</td>
+                        	<td>String</td>
+                        	<td>
+                        		The color of border of custom zoom control in pixels.<br>
+                        		Acceptable value is a color in hexadecimal format.<br>
+                        		Default value is <b><i>#999999</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.zoom.buttons.color</td>
+                        	<td>String</td>
+                        	<td>
+                        		The color of buttons of custom zoom control.<br>
+                        		Acceptable value is a color in hexadecimal format.<br>
+                        		Default value is <b><i>#999999</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.zoom.buttons.size</td>
+                        	<td>Number</td>
+                        	<td>
+                        		The max length of buttons of custom zoom control in pixels.<br>
+                        		Acceptable value is a number.<br>
+                        		Default value is <b><i>25</i></b>.
+                        	</td>
+                        </tr>
+
+                        <tr>
+                        	<td>controls.custom.pan.enabled</td>
+                        	<td>Boolean</td>
+                        	<td>
+                        		The custom pan control.<br>
+                        		Either <b><i>true</i></b> to enable the control, <b><i>false</i></b> to disable them.<br>
+                        		Default: <b><i>false</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.pan.position</td>
+                        	<td>String</td>
+                        	<td>The position of custom pan control.</td>
+                        </tr>
+
+                        <tr>
+                        	<td>controls.custom.pan.background.shape</td>
+                        	<td>String</td>
+                        	<td>
+                        		The shape of custom pan control.<br>
+                        		Acceptable values are <b><i>circle</i></b> and <b><i>cross</i></b>.<br>
+                        		Default value is <b><i>circle</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.pan.background.color</td>
+                        	<td>String</td>
+                        	<td>
+                        		The background color of custom pan control.<br>
+                        		Acceptable value is a color in hexadecimal format.<br>
+                        		Default value is <b><i>#222222</i></b>.
+                        	</td>
+                        </tr>
+
+                        <tr>
+                        	<td>controls.custom.pan.background.size</td>
+                        	<td>Number</td>
+                        	<td>
+                        		The max length of custom pan control in pixels.<br>
+                        		Acceptable value is a number.<br>
+                        		Default value is <b><i>80</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.pan.border.width</td>
+                        	<td>Number</td>
+                        	<td>
+                        		The width of border of custom pan control in pixels.<br>
+                        		Acceptable value is a number.<br>
+                        		Default value is <b><i>0</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.pan.border.color</td>
+                        	<td>String</td>
+                        	<td>
+                        		The color of border of custom pan control in pixels.<br>
+                        		Acceptable value is a color in hexadecimal format.<br>
+                        		Default value is <b><i>#999999</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.pan.buttons.shape</td>
+                        	<td>String</td>
+                        	<td>
+                        		The shape of buttons of custom pan control.<br>
+                        		Acceptable values are <b><i>triangle</i></b> and <b><i>arrow</i></b>.<br>
+                        		Default value is <b><i>triangle</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.pan.buttons.color</td>
+                        	<td>String</td>
+                        	<td>
+                        		The color of buttons of custom pan control.<br>
+                        		Acceptable value is a color in hexadecimal format.<br>
+                        		Default value is <b><i>#999999</i></b>.
+                        	</td>
+                        </tr>
+                        <tr>
+                        	<td>controls.custom.pan.buttons.size</td>
+                        	<td>Number</td>
+                        	<td>
+                        		The max length of buttons of custom pan control in pixels.<br>
+                        		Acceptable value is a number.<br>
+                        		Default value is <b><i>10</i></b>.
+                        	</td>
+                        </tr>
+
+                    </table>
+            </div>
+            <br>
+
+
+            <h4>GPS Tracking controls</h4>
+            <pre><code>
+{
+    ...
+    controls : {
+        ...
+        route_tracking : {
+            start_stop: {
+                position: "TOP_LEFT|TOP_CENTER|TOP_RIGHT|RIGHT_TOP|RIGHT_CENTER|RIGHT_BOTTOM|BOTTOM_LEFT|..."
+            }
+        }
+    }
+    ...
+}
+            </code></pre>
+
+            <div class="panel panel-default">
+                    <table class="table">
+                        <tr>
+                            <th>Key</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>controls.route_tracking.start_stop.position</td>
+                            <td>String</td>
+                            <td>The position of start/stop control.</td>
+                        </tr>
+
+                    </table>
+            </div>
+            <br>
+
+            <h3>Add markers and circles</h3>
+            <p>Add markers and circles in map.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>POST</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/draw</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                    <tr>
+                        <td>Content-Type</td>
+                        <td>application/json</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <pre><code>
+{
+    markers : [{
+        position : {
+            lat: 30.3030,
+            lon: 40.4040
+        },
+        icon: "http://www.mapito.org/example-icon.png"
+    }],
+    circles : [{
+        position : {
+            lat: 30.3030,
+            lon: 40.4040
+        },
+        strokeColor: "#FF0000",
+        strokeOpacity: "0.3",
+        strokeWeight: "3",
+        fillColor: "FF0000",
+        fillOpacity: "0.5",
+        radius: 1000
+    }]
+}
+            </code></pre>
+            <br>
+
+            <div class="panel panel-default">
+                    <table class="table">
+                        <tr>
+                            <th>Key</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>markers.position.lat</td>
+                            <td>Number</td>
+                            <td><b>Require</b>. Latitude.</td>
+                        </tr>
+                        <tr>
+                            <td>markers.position.lon</td>
+                            <td>Number</td>
+                            <td><b>Require</b>. Longitude.</td>
+                        </tr>
+                        <tr>
+                            <td>markers.icon</td>
+                            <td>String</td>
+                            <td><b>Optional</b>. An URL from icon.</td>
+                        </tr>
+                        <tr>
+                            <td>circles.position.lat</td>
+                            <td>Number</td>
+                            <td><b>Require</b>. Latitude.</td>
+                        </tr>
+                        <tr>
+                            <td>circles.position.lon</td>
+                            <td>Number</td>
+                            <td><b>Require</b>. Longitude.</td>
+                        </tr>
+                        <tr>
+                            <td>circles.strokeColor</td>
+                            <td>String</td>
+                            <td><b>Optional</b>. Hex color for stroke.</td>
+                        </tr>
+                        <tr>
+                            <td>circles.strokeOpacity</td>
+                            <td>String</td>
+                            <td><b>Optional</b>. Float number between 0 and 1.</td>
+                        </tr>
+                        <tr>
+                            <td>circles.strokeWeight</td>
+                            <td>String</td>
+                            <td><b>Optional</b>. A number in pixels.</td>
+                        </tr>
+                        <tr>
+                            <td>circles.fillColor</td>
+                            <td>String</td>
+                            <td><b>Optional</b>. Hex color for fill.</td>
+                        </tr>
+                        <tr>
+                            <td>circles.fillOpacity</td>
+                            <td>String</td>
+                            <td><b>Optional</b>. Float number between 0 and 1.</td>
+                        </tr>
+                        <tr>
+                            <td>circles.radius</td>
+                            <td>String</td>
+                            <td><b>Optional</b>. Radius in meters.</td>
+                        </tr>
+                    </table>
+            </div>
+
+            <h3>Modify markers and circles</h3>
+            <p>Modify markers and circles.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>PUT</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/draw</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                    <tr>
+                        <td>Content-Type</td>
+                        <td>application/json</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <pre><code>
+{
+    markers : [{
+        _id : "************************************",
+        position : {
+            lat: 30.3030,
+            lon: 40.4040
+        },
+        icon: "http://www.mapito.org/example-icon.png"
+    }],
+    circles : [{
+        _id : "************************************",
+        position : {
+            lat: 30.3030,
+            lon: 40.4040
+        },
+        strokeColor: "#FF0000",
+        strokeOpacity: "0.3",
+        strokeWeight: "3",
+        fillColor: "FF0000",
+        fillOpacity: "0.5",
+        radius: 1000
+    }]
+}
+            </code></pre>
+            <br>
+
+            <div class="panel panel-default">
+                <table class="table">
+                    <tr>
+                        <th>Key</th>
+                        <th>Type</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>markers._id</td>
+                        <td>String</td>
+                        <td><b>Require</b>. The marker Id.</td>
+                    </tr>
+                    <tr>
+                        <td>markers.position.lat</td>
+                        <td>Number</td>
+                        <td><b>Require</b>. Latitude.</td>
+                    </tr>
+                    <tr>
+                        <td>markers.position.lon</td>
+                        <td>Number</td>
+                        <td><b>Require</b>. Longitude.</td>
+                    </tr>
+                    <tr>
+                        <td>markers.icon</td>
+                        <td>String</td>
+                        <td><b>Optional</b>. An URL from icon.</td>
+                    </tr>
+                    <tr>
+                        <td>circles._id</td>
+                        <td>String</td>
+                        <td><b>Require</b>. The circle Id.</td>
+                    </tr>
+                    <tr>
+                        <td>circles.position.lat</td>
+                        <td>Number</td>
+                        <td><b>Require</b>. Latitude.</td>
+                    </tr>
+                    <tr>
+                        <td>circles.position.lon</td>
+                        <td>Number</td>
+                        <td><b>Require</b>. Longitude.</td>
+                    </tr>
+                    <tr>
+                        <td>circles.strokeColor</td>
+                        <td>String</td>
+                        <td><b>Optional</b>. Hex color for stroke.</td>
+                    </tr>
+                    <tr>
+                        <td>circles.strokeOpacity</td>
+                        <td>String</td>
+                        <td><b>Optional</b>. Float number between 0 and 1.</td>
+                    </tr>
+                    <tr>
+                        <td>circles.strokeWeight</td>
+                        <td>String</td>
+                        <td><b>Optional</b>. A number in pixels.</td>
+                    </tr>
+                    <tr>
+                        <td>circles.fillColor</td>
+                        <td>String</td>
+                        <td><b>Optional</b>. Hex color for fill.</td>
+                    </tr>
+                    <tr>
+                        <td>circles.fillOpacity</td>
+                        <td>String</td>
+                        <td><b>Optional</b>. Float number between 0 and 1.</td>
+                    </tr>
+                    <tr>
+                        <td>circles.radius</td>
+                        <td>String</td>
+                        <td><b>Optional</b>. Radius in meters.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3>Delete markers and circles</h3>
+            <p>Delete markers and circles.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>DELETE</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/draw</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                    <tr>
+                        <td>Content-Type</td>
+                        <td>application/json</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <pre><code>
+{
+    markers : [marker_id_1, marker_id_2, ...],
+    circles : [circle_id_1, circle_id_2, ...]
+}
+            </code></pre>
+            <br>
+
+            <div class="panel panel-default">
+                    <table class="table">
+                        <tr>
+                            <th>Key</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>markers</td>
+                            <td>Array of Strings</td>
+                            <td>An array with markers ids.</td>
+                        </tr>
+                        <tr>
+                            <td>circles</td>
+                            <td>Array of Strings</td>
+                            <td>An array with circles ids.</td>
+                        </tr>
+                    </table>
+            </div>
+
+
+			<br><hr>
+
+            <h3>Get map data</h3>
+			<p>Get map data from one or all maps.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>http://www.mapito.org/api/v1/maps</td>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>http://www.mapito.org/api/v1/maps/{id}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                </table>
+            </div>
+
+			<br><hr>
+
+			<h3>Delete map</h3>
+			<p>Delete a map by id.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>DELETE</td>
+                        <td>http://www.mapito.org/api/v1/maps/{id}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                </table>
+            </div>
+
+
+			<br><hr>
+
+			<h3>Get data</h3>
+			<p>Get data from a map by map id.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>http://www.mapito.org/api/v1/maps/{id}/actions</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                </table>
+            </div>
+
+			<br><hr>
+
+			<h3>Get routes</h3>
+			<p>Get routes from a map by map id.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/routes</td>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/routes/{route_id}</td>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/routes/{route_id}/gpx</td>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/routes/{route_id}/smooth</td>
+                    </tr>
+                    <tr>
+                        <td>GET</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/routes/{route_id}/gpx/smooth</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                </table>
+            </div>
+
+            <br><hr>
+
+            <h3>Create route</h3>
+			<p>Create a new route.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>POST</td>
+                        <td>http://www.mapito.org/api/v1/maps/{id}/routes</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                    <tr>
+                        <td>Content-Type</td>
+                        <td>application/json</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <pre><code>
+{
+    name : "Route name"
+}
+            </code></pre>
+            <br>
+
+			<div class="panel panel-default">
+                <table class="table">
+                    <tr>
+                    	<th>Key</th>
+                    	<th>Type</th>
+                    	<th>Value</th>
+                    </tr>
+                    <tr>
+                    	<td>name</td>
+                    	<td>String</td>
+                    	<td><b>Optional</b>. The name of route.</td>
+                    </tr>
+                </table>
+			</div>
+
+            <h4>Response</h4>
+            <pre><code>
+{
+    status: "ok",
+    route_id: "55772dc865b723b60b5e40ff"
+}
+            </code></pre>
+
+
+            <h3>Add points in route</h3>
+            <p>Add points in route.</p>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>HTTP Method</th>
+                        <th>URI</th>
+                    </tr>
+                    <tr>
+                        <td>PUT</td>
+                        <td>http://www.mapito.org/api/v1/maps/{map_id}/routes/{route_id}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <table class="table table-endpoint">
+                    <tr>
+                        <th>Header field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Authorization</td>
+                        <td>Token YOUR_ACCESS_TOKEN</td>
+                    </tr>
+                    <tr>
+                        <td>Content-Type</td>
+                        <td>application/json</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <pre><code>
+{
+    points : [{
+        lat: Number,
+        lon: Number,
+        ele: Number,
+        time: Date
+    }]
+}
+            </code></pre>
+            <br>
+
+			<div class="panel panel-default">
+                <table class="table">
+                    <tr>
+                    	<th>Key</th>
+                    	<th>Type</th>
+                    	<th>Value</th>
+                    </tr>
+                    <tr>
+                    	<td>points.lat</td>
+                    	<td>Number</td>
+                    	<td><b>Require</b>. Latitude.</td>
+                    </tr>
+                    <tr>
+                    	<td>points.lon</td>
+                    	<td>Number</td>
+                    	<td><b>Require</b>. Longitude.</td>
+                    </tr>
+                    <tr>
+                    	<td>points.ele</td>
+                    	<td>Number</td>
+                    	<td><b>Require</b>. Elevetion.</td>
+                    </tr>
+                    <tr>
+                    	<td>points.time</td>
+                    	<td>Date</td>
+                    	<td><b>Require</b>. Time.</td>
+                    </tr>
+                </table>
+			</div>
+
+
+			<% include ./partials/footer %>
+
+			</div>
+			<br>
+			<br><br><br>
+		<% include ./partials/footer %>
+	</div>
+	<% include ./partials/googleanalytics %>
+</body>
+</html>

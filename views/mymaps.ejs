@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<% include ./partials/static-css-js %>
+	<title>Mapito.org - <%=title%></title>
+	<script src="javascript/mymap.js"></script>
+
+	<style>
+	.table {
+	    font-size: 16px;
+	}
+	.modal-dialog {
+	    margin-top: 10%;
+	}
+	table tr td{
+		padding-top: 20px !important;
+		padding-bottom: 20px !important;
+	}
+
+	table tr td{
+		padding-top: 20px !important;
+		padding-bottom: 20px !important;
+	}
+	table tr td:nth-child(3) {
+		max-width: 100px;
+	}
+	</style>
+
+</head>
+
+<body>
+
+	<div class="container">
+		<% include ./partials/header %>
+
+
+
+			<div class="page-header" style="margin-top: 80px;">
+				<h2 id="dashboard-title"><%=title%></h2>
+			</div>
+
+			<div class="panel panel-default">
+				<table class="table">
+				<%
+				c = 0;
+				maps.forEach(function(map){
+					c += 1;
+				%>
+					<tr>
+
+						<td style="display:none;"><%=map._id%></td>
+						<td><%=c%></td>
+						<td><a href="/view?m=<%=map._id%>"><b><%=map.name%></b></a></td>
+						<td>
+						<div class="btn-group" role="group" aria-label="...">
+
+							<a type="button" class="btn btn-default btn-sm" href="/<%=category%>/settings?mapId=<%=map._id%>">Settings</a>
+							<a type="button" class="btn btn-default btn-sm" href="/<%=category%>/ui_elements?mapId=<%=map._id%>">UI Elements</a>
+							<a type="button" class="btn btn-default btn-sm" href="/<%=category%>/embed?mapId=<%=map._id%>">Embed</a>
+							<a type="button" class="btn btn-default btn-sm public-url-btn" >Public URL</a>
+							<% if (category == "tracking") { %>
+							<a type="button" class="btn btn-default btn-sm" href="/tracking/routes?mapId=<%=map._id%>">Routes</a>
+							<% } %>
+							<a type="button" class="btn btn-default btn-sm" href="/data_download?mapId=<%=map._id%>">Download</a>
+							<a type="button" class="btn btn-default btn-sm delete-map">Delete</a>
+						</div>
+						</td>
+
+					</tr>
+				<% }); %>
+				</table>
+			</div>
+
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">+ New <%=category == "tracking"?"tracking":""%> map</button>
+
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="myModalLabel">Create new map</h4>
+						</div>
+						<div class="modal-body">
+						     <form method="post" action="/<%=category%>/addmap" id="new-map-form">
+								<div class="form-group">
+									<label for="map-name">Give a map name:</label>
+									<input type="text" class="form-control" id="map-name" name="name" placeholder="Map name">
+									<p class="text-warning"></p>
+								</div>
+								<div class="form-group">
+									<label for="map-google">Choose map service:</label>
+									<div class="radio">
+										<label>
+											<input type="radio" name="map_service" id="map-google" value="google" checked>
+											Google
+										</label>
+									</div>
+
+									<div class="radio">
+										<label>
+											<input type="radio" name="map_service" id="map-bing" value="bing">
+											Bing
+										</label>
+									</div>
+
+									<input type="hidden" name="category" value="<%=category%>">
+								</div>
+						     </form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary" id="create-map">Create map</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title text-danger" id="myModalLabel">Are you sure to delete this map?</h4>
+						</div>
+						<div class="modal-body">
+						     <form method="post" action="/deletemap" id="delete-map-form">
+								<input type="hidden" id="delete-map-id" name="id">
+						     </form>
+						     <p class="text-danger">Deleting a map is permanent and cannot be undone. Data and routes associated with this map will no longer be accessible.</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btn btn-danger" id="confirm-delete-map">Delete</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="modal-url">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h4 class="modal-title">Public URL</h4>
+						</div>
+						<div class="modal-body">
+							<input type="text" class="form-control" id="public-url">
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+		<% include ./partials/footer %>
+	</div>
+	<% include ./partials/googleanalytics %>
+</body>
+</html>

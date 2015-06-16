@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>API - Mapito.org</title>
+<% include ./partials/static-css-js %>
+<script>
+$(document).ready(function() {
+	$("#navbar-api").addClass("active");
+});
+</script>
+</head>
+
+<body>
+
+	<div class="container">
+		<% include ./partials/header %>
+        
+		<div class="page-header">
+			<h1 id="dashboard-title">Mapito APIs</h1>
+		</div>
+
+        <div class="row text-center">
+        	<div class="col-sm-6 col-md-offset-2 col-md-4">
+        		<h2>Mapito HTTP API</h2>
+        		<p>
+                    HTTP API designed for web and mobile developers and provides all options of Mapito via HTTP requests.
+        		</p>
+        		<p>
+        			<a class="btn btn-default" href="/http_api">View details &raquo;</a>
+        		</p>
+        	</div>
+        	<div class="col-sm-6 col-md-4">
+        		<h2>Mapito JavaScript API</h2>
+        		<p>
+                    JavaScript API that designed for developers who use embedded Mapito Maps and provides methods to edit the maps.
+        		</p>
+        		<p>
+        			<a class="btn btn-default" href="/js_api">View details &raquo;</a>
+        		</p>
+        	</div>
+        </div>
+
+		<% include ./partials/footer %>
+	</div>
+	<% include ./partials/googleanalytics %>
+</body>
+</html>

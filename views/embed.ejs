@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<% include ./partials/static-css-js %>
+<title>Mapito.org - Embed code</title>
+
+<style>
+html { height: 100% }
+body { 
+	margin: 0;
+	padding: 50px 0 50px 0; 
+	height: 100%;
+	overflow:hidden;
+}
+</style>
+
+<script>
+$(document).ready(function() {
+	$("#navbar-embed").addClass("active");
+});
+</script>
+</head>
+
+<body>
+
+	<div class="container">
+		<% include ./partials/header %>
+	
+
+			<div class="page-header">
+				<h2 id="dashboard-title">Embed</h2>
+			</div>
+			<div>
+			Copy the following lines just before in the <code>&#60;/head></code> tag.<br><br>
+			<pre><code>&#60;script src="http://www.mapito.org/api/js" type="text/javascript">&#60;/script>
+&#60;script src="http://www.mapito.org/js/embed" type="text/javascript">&#60;/script></code></pre>
+			<br>
+			Also copy the following line in the body. <br><br>
+			<pre><code>&#60;div data-mapito="<%=map._id%>" style="width:500px;height:400px;position:relative;">&#60;/div></code></pre>
+			</div>
+				
+
+
+		<% include ./partials/footer %>
+	</div>
+	<% include ./partials/googleanalytics %>
+</body>
+</html>
